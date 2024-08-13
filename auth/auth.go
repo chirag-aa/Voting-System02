@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -10,7 +11,7 @@ import (
 )
 
 var (
-	jwtKey = []byte("your_secret_key")
+	jwtKey = []byte("Some Secrete value")
 	ctx    = context.Background()
 	rdb    *redis.Client
 )
@@ -34,13 +35,17 @@ func Register(username, password string) error {
 	if err != nil {
 		return err
 	}
-	return rdb.Set(ctx, username, hashedPassword, 0).Err()
+	err = rdb.Set(ctx, username, hashedPassword, 0).Err()
+	if err != nil {
+		log.Println(err)
+	}
+	return nil
 }
 
 func Authenticate(username, password string) (string, error) {
 	storedPassword, err := rdb.Get(ctx, username).Result()
 	if err != nil {
-		return "", err
+		return "There is some error ", err
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(storedPassword), []byte(password)); err != nil {
 		return "", err

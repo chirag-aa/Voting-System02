@@ -9,4 +9,5 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
+	golang.org/x/crypto v0.26.0
 )
